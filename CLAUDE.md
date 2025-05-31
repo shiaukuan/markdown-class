@@ -342,136 +342,6 @@ export function useRealtime<T extends keyof Database['public']['Tables']>(
 }
 ```
 
-## 🔄 Client-Side Data Management (TanStack Query)
-
-### When to Use TanStack Query
-
-- **Client Components** that need caching, background refetching, and optimistic updates
-- **Complex data synchronization** between server state and UI
-- **Infinite scrolling** and pagination
-- **NOT for initial page loads** - use Server Components instead
-
-### Setup
-
-```bash
-npm i @tanstack/react-query
-```
-
-```typescript
-// app/providers.tsx
-'use client'
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000,
-      gcTime: 5 * 60 * 1000,
-    },
-  },
-})
-
-export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  )
-}
-```
-
-### Query Patterns
-
-```typescript
-// hooks/use-posts.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { createClient } from '@/lib/supabase/client'
-
-// ✅ Use for client-side data fetching with caching
-export function usePosts(userId?: string) {
-  const supabase = createClient()
-  
-  return useQuery({
-    queryKey: ['posts', userId],
-    queryFn: async () => {
-      const query = supabase.from('posts').select('*')
-      if (userId) query.eq('author_id', userId)
-      
-      const { data, error } = await query
-      if (error) throw error
-      return data
-    },
-    enabled: !!userId, // Only run when userId exists
-  })
-}
-
-// ✅ Mutations with optimistic updates
-export function useCreatePost() {
-  const queryClient = useQueryClient()
-  const supabase = createClient()
-  
-  return useMutation({
-    mutationFn: async (newPost: PostInput) => {
-      const { data, error } = await supabase
-        .from('posts')
-        .insert(newPost)
-        .select()
-        .single()
-      
-      if (error) throw error
-      return data
-    },
-    onMutate: async (newPost) => {
-      // Cancel in-flight queries
-      await queryClient.cancelQueries({ queryKey: ['posts'] })
-      
-      // Snapshot previous value
-      const previousPosts = queryClient.getQueryData(['posts'])
-      
-      // Optimistically update
-      queryClient.setQueryData(['posts'], (old: Post[]) => [
-        { ...newPost, id: 'temp-id' },
-        ...old,
-      ])
-      
-      return { previousPosts }
-    },
-    onError: (err, newPost, context) => {
-      // Rollback on error
-      queryClient.setQueryData(['posts'], context?.previousPosts)
-    },
-    onSettled: () => {
-      // Always refetch after error or success
-      queryClient.invalidateQueries({ queryKey: ['posts'] })
-    },
-  })
-}
-
-// ✅ Combine with Server Actions
-export function useServerAction<TData, TVariables>(
-  action: (variables: TVariables) => Promise<TData>,
-  options?: {
-    onSuccess?: (data: TData) => void
-    invalidateKeys?: string[][]
-  }
-) {
-  const queryClient = useQueryClient()
-  
-  return useMutation({
-    mutationFn: action,
-    onSuccess: (data) => {
-      options?.onSuccess?.(data)
-      options?.invalidateKeys?.forEach(key => 
-        queryClient.invalidateQueries({ queryKey: key })
-      )
-    },
-  })
-}
-```
-
 ## 🧪 Testing Infrastructure (Vitest)
 
 ### When to Test
@@ -757,8 +627,6 @@ npm run build              # Type-safe build
 supabase db push          # Deploy migrations
 ```
 
-
-
 ## 🚨 Critical Rules
 
 1. **Always regenerate types after schema changes**
@@ -771,5 +639,4 @@ supabase db push          # Deploy migrations
 8. **Use Server Actions for mutations**
 9. **Implement proper error boundaries**
 10. **Stream data with Suspense for better UX**
-11. **Use TanStack Query for client-side state, not initial loads**
-12. **Test business logic, not implementation details**
+11. **Test business logic, not implementation details**

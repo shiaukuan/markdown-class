@@ -9,7 +9,6 @@ A modern, production-ready starter template for building full-stack applications
 - **TypeScript** with strict mode for type safety
 - **Tailwind CSS v4** for modern styling
 - **shadcn/ui** component library
-- **TanStack Query** for client-side data management
 - **Vitest** for testing
 - **Zod** for schema validation
 - Pre-configured development tools (ESLint, Prettier, Husky)
