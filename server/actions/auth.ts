@@ -33,7 +33,7 @@ export async function signUp(data: SignUpData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  return { success: true }
 }
 
 export async function signIn(data: SignInData) {
@@ -49,7 +49,7 @@ export async function signIn(data: SignInData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  return { success: true }
 }
 
 export async function signOut() {
