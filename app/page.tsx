@@ -1,103 +1,261 @@
-import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  ArrowRight, 
+  Code2, 
+  Database, 
+  Layers, 
+  Rocket, 
+  Shield, 
+  Sparkles,
+  Terminal,
+  Zap
+} from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-24 text-center">
+        <div className="flex justify-center mb-6">
+          <Badge variant="secondary" className="px-4 py-1">
+            <Sparkles className="w-3 h-3 mr-1" />
+            Next.js 15.3 + Supabase + TypeScript
+          </Badge>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+          Build faster with
+          <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            {" "}modern tools
+          </span>
+        </h1>
+        
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          A production-ready starter template with Next.js 15.3, Supabase, TypeScript, 
+          Tailwind CSS v4, and shadcn/ui components.
+        </p>
+        
+        <div className="flex gap-4 justify-center">
+          <Button size="lg" className="gap-2">
+            Get Started <ArrowRight className="w-4 h-4" />
+          </Button>
+          <Button size="lg" variant="outline" asChild>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+              View on GitHub
+            </a>
+          </Button>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">Everything you need</h2>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-blue-600" />
+              </div>
+              <CardTitle>Next.js 15.3</CardTitle>
+              <CardDescription>
+                Latest App Router with Server Components, Server Actions, and streaming
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-900/20 flex items-center justify-center mb-4">
+                <Database className="w-6 h-6 text-green-600" />
+              </div>
+              <CardTitle>Supabase</CardTitle>
+              <CardDescription>
+                PostgreSQL database with real-time subscriptions and Row Level Security
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center mb-4">
+                <Code2 className="w-6 h-6 text-purple-600" />
+              </div>
+              <CardTitle>TypeScript</CardTitle>
+              <CardDescription>
+                Full type safety with generated Supabase types and strict mode
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center mb-4">
+                <Layers className="w-6 h-6 text-orange-600" />
+              </div>
+              <CardTitle>Tailwind CSS v4</CardTitle>
+              <CardDescription>
+                Modern CSS with design tokens and no configuration needed
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-pink-100 dark:bg-pink-900/20 flex items-center justify-center mb-4">
+                <Shield className="w-6 h-6 text-pink-600" />
+              </div>
+              <CardTitle>Authentication</CardTitle>
+              <CardDescription>
+                Built-in auth with protected routes and middleware setup
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="w-12 h-12 rounded-lg bg-cyan-100 dark:bg-cyan-900/20 flex items-center justify-center mb-4">
+                <Rocket className="w-6 h-6 text-cyan-600" />
+              </div>
+              <CardTitle>Production Ready</CardTitle>
+              <CardDescription>
+                Testing with Vitest, error handling, and deployment configs
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </section>
+
+      {/* Code Examples */}
+      <section className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">Quick Start</h2>
+        
+        <Tabs defaultValue="setup" className="max-w-4xl mx-auto">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="setup">Setup</TabsTrigger>
+            <TabsTrigger value="database">Database</TabsTrigger>
+            <TabsTrigger value="component">Component</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="setup">
+            <Card>
+              <CardHeader>
+                <CardTitle>Get up and running</CardTitle>
+                <CardDescription>Clone the repo and install dependencies</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-zinc-950 rounded-lg p-4 font-mono text-sm text-zinc-50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Terminal className="w-4 h-4 text-zinc-400" />
+                    <span className="text-zinc-400">Terminal</span>
+                  </div>
+                  <pre className="overflow-x-auto">
+{`# Clone the repository
+git clone https://github.com/your-repo/nextjs-supabase-starter.git
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+
+# Start development server
+npm run dev`}
+                  </pre>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="database">
+            <Card>
+              <CardHeader>
+                <CardTitle>Type-safe database queries</CardTitle>
+                <CardDescription>Generated types from your schema</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-zinc-950 rounded-lg p-4 font-mono text-sm text-zinc-50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Code2 className="w-4 h-4 text-zinc-400" />
+                    <span className="text-zinc-400">server/queries/posts.ts</span>
+                  </div>
+                  <pre className="overflow-x-auto">
+{`import { createClient } from '@/lib/supabase/server'
+
+export async function getPosts() {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*, profiles!inner(username)')
+    .order('created_at', { ascending: false })
+    
+  if (error) throw error
+  return data // Fully typed!
+}`}
+                  </pre>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="component">
+            <Card>
+              <CardHeader>
+                <CardTitle>Server Components by default</CardTitle>
+                <CardDescription>Fetch data directly in components</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-zinc-950 rounded-lg p-4 font-mono text-sm text-zinc-50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Code2 className="w-4 h-4 text-zinc-400" />
+                    <span className="text-zinc-400">app/posts/page.tsx</span>
+                  </div>
+                  <pre className="overflow-x-auto">
+{`export default async function PostsPage() {
+  const posts = await getPosts()
+  
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Posts</h1>
+      <div className="grid gap-4">
+        {posts.map(post => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+    </div>
+  )
+}`}
+                  </pre>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-24">
+        <Card className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-0">
+          <CardContent className="text-center py-12">
+            <h2 className="text-3xl font-bold mb-4">Ready to build?</h2>
+            <p className="text-xl mb-8 text-blue-50">
+              Start your next project with this production-ready starter
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button size="lg" variant="secondary" className="gap-2">
+                Get Started <ArrowRight className="w-4 h-4" />
+              </Button>
+              <Button size="lg" variant="ghost" className="text-white hover:text-white hover:bg-white/20">
+                Read Documentation
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }
