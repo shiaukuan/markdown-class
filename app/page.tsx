@@ -13,8 +13,12 @@ import {
   Terminal,
   Zap
 } from "lucide-react";
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -39,14 +43,26 @@ export default function Home() {
         </p>
         
         <div className="flex gap-4 justify-center">
-          <Button size="lg" className="gap-2">
-            Get Started <ArrowRight className="w-4 h-4" />
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-              View on GitHub
-            </a>
-          </Button>
+          {user ? (
+            <Link href="/dashboard">
+              <Button size="lg" className="gap-2">
+                Go to Dashboard <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/signin">
+                <Button size="lg" className="gap-2">
+                  Get Started <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="lg" variant="outline">
+                  Create Account
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </section>
 
@@ -246,9 +262,19 @@ export async function getPosts() {
               Start your next project with this production-ready starter
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="gap-2">
-                Get Started <ArrowRight className="w-4 h-4" />
-              </Button>
+              {user ? (
+                <Link href="/dashboard">
+                  <Button size="lg" variant="secondary" className="gap-2">
+                    Go to Dashboard <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/signin">
+                  <Button size="lg" variant="secondary" className="gap-2">
+                    Get Started <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              )}
               <Button size="lg" variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                 Read Documentation
               </Button>
