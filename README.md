@@ -9,9 +9,11 @@ A modern, production-ready starter template for building full-stack applications
 - **TypeScript** with strict mode for type safety
 - **Tailwind CSS v4** for modern styling
 - **shadcn/ui** component library
+- **Authentication** - Complete auth flow with sign up, sign in, and protected routes
+- **Database Migrations** - Migration-first development with type generation
 - **Vitest** for testing
 - **Zod** for schema validation
-- Pre-configured development tools (ESLint, Prettier, Husky)
+- Pre-configured development tools (ESLint, Prettier)
 
 ## 📋 Prerequisites
 
@@ -57,16 +59,28 @@ Open [http://localhost:3000](http://localhost:3000) to see your app.
 
 ```
 ├── app/                    # Next.js App Router
+│   ├── (auth)/            # Auth routes (signin, signup)
+│   ├── (dashboard)/       # Protected dashboard routes
+│   └── layout.tsx         # Root layout
 ├── components/            
 │   ├── ui/                # shadcn/ui components
 │   └── features/          # Feature-specific components
+│       └── auth/          # Auth form components
 ├── lib/
 │   ├── supabase/         # Supabase client configs
+│   ├── env.ts            # Environment validation
 │   └── utils.ts          # Utility functions
+├── server/
+│   ├── actions/          # Server Actions
+│   │   └── auth.ts       # Auth actions (signUp, signIn, signOut)
+│   └── queries/          # Database queries
+├── hooks/                # React hooks
 ├── supabase/
 │   ├── migrations/       # Database migrations
 │   └── config.toml       # Supabase configuration
-└── types/                # TypeScript types
+├── types/                # TypeScript types
+│   └── supabase.ts       # Generated DB types
+└── middleware.ts         # Auth middleware
 ```
 
 ## 🔧 Available Scripts
@@ -159,6 +173,15 @@ import type { Database } from '@/types/supabase'
 
 type Post = Database['public']['Tables']['posts']['Row']
 ```
+
+### Authentication Flow
+
+The starter includes a complete auth setup:
+- Sign up/in pages at `/signup` and `/signin`
+- Protected routes under `(dashboard)`
+- Server actions for auth operations
+- Automatic profile creation on signup
+- Session management via middleware
 
 ## 🚨 Important Guidelines
 

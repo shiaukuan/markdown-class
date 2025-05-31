@@ -220,7 +220,14 @@ export default async function Layout({ children }) {
 }
 ```
 
-## 🔐 Authentication Pattern
+## 🔐 Authentication Pattern (Already Implemented)
+
+The starter includes a complete authentication setup:
+- Sign up/Sign in pages at `/signup` and `/signin`
+- Protected dashboard routes under `app/(dashboard)/`
+- Server actions in `server/actions/auth.ts`
+- Auth middleware configuration
+- Profile creation on signup
 
 ```typescript
 // middleware.ts
@@ -246,6 +253,11 @@ export default async function DashboardLayout({ children }) {
   
   return <>{children}</>
 }
+
+// server/actions/auth.ts - Available auth actions
+export async function signUp(formData: FormData)
+export async function signIn(formData: FormData)
+export async function signOut()
 ```
 
 ## 🎨 UI Components (shadcn/ui + Tailwind v4)
