@@ -6,13 +6,13 @@
 
 ```bash
 # After ANY schema change:
-supabase gen types --local > src/types/supabase.ts
+supabase gen types --local > types/supabase.ts
 
 # Automate with git hooks:
 # .husky/pre-commit
 if git diff --cached --name-only | grep -q "supabase/migrations"; then
   npm run types:generate
-  git add src/types/supabase.ts
+  git add types/supabase.ts
 fi
 ```
 
@@ -44,7 +44,7 @@ export async function createPost(data: PostInput) {
 ### 3. Supabase Client Separation
 
 ```typescript
-// src/lib/supabase/client.ts - Browser only
+// lib/supabase/client.ts - Browser only
 import { createBrowserClient } from '@supabase/ssr'
 import type { Database } from '@/types/supabase'
 
@@ -54,7 +54,7 @@ export const createClient = () =>
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-// src/lib/supabase/server.ts - Server only
+// lib/supabase/server.ts - Server only
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
@@ -99,7 +99,7 @@ When working with Supabase databases, **ALWAYS** use migrations for ANY schema c
 4. **After EVERY migration**:
     ```bash
     supabase db reset                          # Apply locally
-    supabase gen types --local > src/types/supabase.ts  # Update types
+    supabase gen types --local > types/supabase.ts  # Update types
     ```
 5. **Example workflow for adding a field**:
     ```bash
@@ -119,14 +119,13 @@ When working with Supabase databases, **ALWAYS** use migrations for ANY schema c
 7. **Commit both**:
     
     - Migration file (`supabase/migrations/*.sql`)
-    - Updated types (`src/types/supabase.ts`)
+    - Updated types (`types/supabase.ts`)
 
 This ensures reproducible database states across all environments and team members.
 
 ## 📁 Project Structure (Next.js 15.3 + Supabase)
 
 ```
-src/
 ├── app/                      # App Router
 │   ├── (auth)/              # Auth group routes
 │   ├── (dashboard)/         # Protected routes
@@ -144,8 +143,11 @@ src/
 ├── hooks/                   # Client hooks
 ├── test/                    # Test utilities
 │   └── setup.ts            # Vitest setup
-└── types/
-    └── supabase.ts         # Generated types
+├── types/
+│   └── supabase.ts         # Generated types
+└── supabase/
+    ├── migrations/         # Database migrations
+    └── config.toml         # Supabase configuration
 ```
 
 ## 🎯 Next.js 15.3 Patterns
@@ -153,7 +155,7 @@ src/
 ### Server Actions with Revalidation
 
 ```typescript
-// src/server/actions/posts.ts
+// server/actions/posts.ts
 'use server'
 
 import { revalidateTag, revalidatePath } from 'next/cache'
@@ -232,7 +234,7 @@ export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }
 
-// src/app/(dashboard)/layout.tsx
+// app/(dashboard)/layout.tsx
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
@@ -251,7 +253,7 @@ export default async function DashboardLayout({ children }) {
 ### Tailwind v4 Configuration
 
 ```css
-/* src/app/globals.css */
+/* app/globals.css */
 @import "tailwindcss";
 
 /* Define design tokens in @theme */
@@ -311,7 +313,7 @@ export function PostCard({ post }: { post: Post }) {
 ## 🔥 Real-time Subscriptions
 
 ```typescript
-// src/hooks/use-realtime.ts
+// hooks/use-realtime.ts
 export function useRealtime<T extends keyof Database['public']['Tables']>(
   table: T,
   filter?: string
@@ -495,17 +497,17 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
+    setupFiles: './test/setup.ts',
     globals: true,
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './'),
     },
   },
 })
 
-// src/test/setup.ts
+// test/setup.ts
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 
@@ -616,7 +618,7 @@ describe('createPost', () => {
 ### Type-Safe Queries
 
 ```typescript
-// src/server/queries/posts.ts
+// server/queries/posts.ts
 import type { Database } from '@/types/supabase'
 
 type Tables<T extends keyof Database['public']['Tables']> = 
@@ -709,7 +711,7 @@ async function PostsList() {
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "db:types": "supabase gen types --local > src/types/supabase.ts",
+    "db:types": "supabase gen types --local > types/supabase.ts",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset"
   }
@@ -719,7 +721,7 @@ async function PostsList() {
 ### Environment Variables
 
 ```typescript
-// src/lib/env.ts - Validated env vars
+// lib/env.ts - Validated env vars
 import { z } from 'zod'
 
 const envSchema = z.object({
@@ -745,7 +747,7 @@ npm run test:coverage      # Generate coverage report
 
 # Database
 supabase db reset           # Reset + migrate
-supabase gen types --local > src/types/supabase.ts
+supabase gen types --local > types/supabase.ts
 
 # UI Components
 npx shadcn@latest add       # Add components
